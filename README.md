@@ -15,7 +15,7 @@ To develop a simple web-based calculator that performs basic arithmetic operatio
 * HTML
 * CSS
 * JavaScript
-* VS Code / Any Web Browser
+* VS Code
 
 --Outcome:
 The calculator application successfully performs basic mathematical operations through a user-friendly web interface and displays accurate results instantly.
