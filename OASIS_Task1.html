@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Calculator</title>
+  <style>
+    
+    body {
+      background-color: #1a1a2e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: monospace;
+    }
+
+    .calculator {
+      background-color: #16213e;
+      border-radius: 16px;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .screen {
+      background-color: #0f3460;
+      color: #e0e0e0;
+      text-align: right;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+
+    .expr {
+      font-size: 13px;
+      color: #a0a0c0;
+      min-height: 18px;
+    }
+
+    .result {
+      font-size: 34px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .btn {
+      background-color: #1a1a3e;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 18px 0;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #2a2a5e;
+    }
+
+    .btn.op {
+      background-color: #e94560;
+      color: #ffffff;
+    }
+
+    .btn.op:hover {
+      background-color: #c73652;
+    }
+
+    .btn.eq {
+      background-color: #0f3460;
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .btn.eq:hover {
+      background-color: #1a4a80;
+    }
+
+    .btn.clear {
+      background-color: #533483;
+      color: #ffffff;
+    }
+
+    .btn.clear:hover {
+      background-color: #6a45a0;
+    }
+
+    .span2 {
+      grid-column: span 2;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="calculator">
+
+    <div class="screen">
+      <div class="expr" id="expr"></div>
+      <div class="result" id="result">0</div>
+    </div>
+
+    <div class="grid">
+      <button class="btn clear span2" onclick="clearAll()">AC</button>
+      <button class="btn op" onclick="inputOp('%')">%</button>
+      <button class="btn op" onclick="inputOp('/')">÷</button>
+
+      <button class="btn" onclick="inputNum('7')">7</button>
+      <button class="btn" onclick="inputNum('8')">8</button>
+      <button class="btn" onclick="inputNum('9')">9</button>
+      <button class="btn op" onclick="inputOp('*')">×</button>
+
+      <button class="btn" onclick="inputNum('4')">4</button>
+      <button class="btn" onclick="inputNum('5')">5</button>
+      <button class="btn" onclick="inputNum('6')">6</button>
+      <button class="btn op" onclick="inputOp('-')">−</button>
+
+      <button class="btn" onclick="inputNum('1')">1</button>
+      <button class="btn" onclick="inputNum('2')">2</button>
+      <button class="btn" onclick="inputNum('3')">3</button>
+      <button class="btn op" onclick="inputOp('+')">+</button>
+
+      <button class="btn span2" onclick="inputNum('0')">0</button>
+      <button class="btn" onclick="inputDot()">.</button>
+      <button class="btn eq" onclick="calculate()">=</button>
+    </div>
+
+  </div>
+
+  <script>
+    let current = '0', expr = '', justCalc = false;
+
+    function updateDisplay() {
+      document.getElementById('result').textContent = current;
+      document.getElementById('expr').textContent = expr;
+    }
+
+    function inputNum(n) {
+      if (justCalc) { current = n; expr = ''; justCalc = false; }
+      else current = current === '0' ? n : current + n;
+      updateDisplay();
+    }
+
+    function inputDot() {
+      if (justCalc) { current = '0.'; expr = ''; justCalc = false; }
+      else if (!current.includes('.')) current += '.';
+      updateDisplay();
+    }
+
+    function inputOp(op) {
+      justCalc = false;
+      expr = current + ' ' + op;
+      current = '0';
+      updateDisplay();
+    }
+
+    function calculate() {
+      if (!expr) return;
+      const parts = expr.trim().split(' ');
+      const a = parseFloat(parts[0]);
+      const op = parts[1];
+      const b = parseFloat(current);
+      let res;
+      if (op === '+') res = a + b;
+      else if (op === '-') res = a - b;
+      else if (op === '*') res = a * b;
+      else if (op === '/') res = b === 0 ? 'Error' : a / b;
+      else if (op === '%') res = a % b;
+      expr = parts[0] + ' ' + op + ' ' + b + ' =';
+      current = res === 'Error' ? 'Error' : parseFloat(res.toFixed(10)).toString();
+      justCalc = true;
+      updateDisplay();
+    }
+
+    function clearAll() {
+      current = '0'; expr = ''; justCalc = false;
+      updateDisplay();
+    }
+  </script>
+
+</body>
+</html>
